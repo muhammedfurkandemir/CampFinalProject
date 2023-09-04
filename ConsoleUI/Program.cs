@@ -8,24 +8,29 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
+            //Data Transformation Object 
+            //CategoryTest();
+            //IoC
+            ProductTest();
+
+        }
+
+        private static void CategoryTest()
+        {
             CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
             foreach (var category in categoryManager.GetAll())
             {
                 Console.WriteLine(category.CategoryName);
             }
-
-            //ProductTest();
-
         }
 
         private static void ProductTest()
         {
             ProductManager productManager = new ProductManager(new EfProductDal());
-            var result = productManager.GetByUnitPrice(40, 60).OrderBy(p => p.UnitPrice);
-            foreach (var product in result)
-            {
-                Console.WriteLine(product.UnitPrice);
 
+            foreach (var product in productManager.GetProductDetails())
+            {
+                Console.WriteLine(product.ProductName +" / "+product.CategoryName);
             }
         }
     }
