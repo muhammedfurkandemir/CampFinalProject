@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Abstract
-{
+namespace Core.Entities
+{ 
     /// <summary>
     /// IEntity implement eden class bir veritabanı tablosudur.
     /// </summary>
