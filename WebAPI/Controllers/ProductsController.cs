@@ -15,12 +15,14 @@ namespace WebAPI.Controllers
         //bir sınıfa veya bir şeye bağımlılık olacak sa asla sınıf gibi somut olanlarla değil soyut varlıklarla 
         //interface gibi bağlanmalıdır.
         //IoC Container -- Inversion of Control
-        //IProductService _productService;
 
-        //public ProductsController(IProductService productService)
-        //{
-        //    _productService = productService;
-        //}
+        IProductService _productService;
+
+        public ProductsController(IProductService productService)
+        {
+            _productService = productService;
+        }
+
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
@@ -28,10 +30,7 @@ namespace WebAPI.Controllers
             //bu bağımlılığa dependency chain : bağımlılık zinciri denir
             //swagger : hazır dökümantasyon imkanı sağlar.
 
-            //var result= _productService.GetAll();
-
-            IProductService productService = new ProductManager(new EfProductDal());
-            var result=productService.GetAll();
+            var result=_productService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -41,8 +40,7 @@ namespace WebAPI.Controllers
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
-            IProductService productService = new ProductManager(new EfProductDal());
-            var result = productService.GetById(id);
+            var result = _productService.GetById(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -53,8 +51,7 @@ namespace WebAPI.Controllers
         [HttpPost("add")]
         public IActionResult Add(Product product)
         {
-            IProductService productService = new ProductManager(new EfProductDal());
-            var result = productService.Add(product);
+            var result = _productService.Add(product);
             if (result.Success)
             {
                 return Ok(result);

@@ -1,3 +1,7 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Business.DependencyResolvers.Autofac;
+
 namespace WebAPI
 {
     public class Program
@@ -7,6 +11,15 @@ namespace WebAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            //builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory(options =>
+            //options.RegisterModule(new AutofacBusinessModule())));
+
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+            builder.Host.ConfigureContainer<ContainerBuilder>(options =>
+            {
+                options.RegisterModule(new AutofacBusinessModule());
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,7 +28,7 @@ namespace WebAPI
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline. 
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
