@@ -2,10 +2,13 @@ using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolvers.Autofac;
+using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Core.Extensions;
+using Core.DependencyResolvers;
 
 namespace WebAPI
 {
@@ -30,6 +33,8 @@ namespace WebAPI
 
             //me// JWT İmplementasyonu
 
+            builder.Services.AddCors();
+
             var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -47,6 +52,10 @@ namespace WebAPI
                    };
                });
 
+            builder.Services.AddDependencyResolvers(new ICoreModule[]
+            {
+                new CoreModule() 
+            });
 
             //me//
 
@@ -64,6 +73,9 @@ namespace WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors(builder=>builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
+            //yukarıdaki adrese sahip herhangi bir adresten gelen isteğe get post vs cevap ver ben bu adrese izin veriyorum demektir.
 
             app.UseHttpsRedirection();
 
